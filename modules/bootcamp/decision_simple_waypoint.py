@@ -79,7 +79,9 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
         # If we haven't calculated the closest landing pad yet and we have landing pad data
         if not self.closest_landing_pad_calculated and landing_pad_locations:
             # Calculate closest landing pad to waypoint (not current position)
-            self.closest_landing_pad = self._find_closest_landing_pad(self.waypoint, landing_pad_locations)
+            self.closest_landing_pad = self._find_closest_landing_pad(
+                self.waypoint, landing_pad_locations
+            )
             self.closest_landing_pad_calculated = True
             print(f"Closest landing pad to waypoint: {self.closest_landing_pad}")
 
@@ -127,7 +129,7 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
                 if relative_movement is not None:
                     command = commands.Command.create_set_relative_destination_command(
                         relative_x=relative_movement.location_x,
-                        relative_y=relative_movement.location_y
+                        relative_y=relative_movement.location_y,
                     )
                 else:
                     # If we can't move (e.g., at boundary), try to land
@@ -154,7 +156,9 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
         """
         return (self._calculate_distance_squared(pos1, pos2)) ** 0.5
 
-    def _calculate_distance_squared(self, pos1: location.Location, pos2: location.Location) -> float:
+    def _calculate_distance_squared(
+        self, pos1: location.Location, pos2: location.Location
+    ) -> float:
         """
         Calculate squared Euclidean distance between two locations.
         Avoids expensive square root calculation when only comparing distances.
@@ -163,8 +167,9 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
         dy = pos2.location_y - pos1.location_y
         return dx * dx + dy * dy
 
-    def _find_closest_landing_pad(self, reference_point: location.Location,
-                                landing_pad_locations: "list[location.Location]") -> location.Location:
+    def _find_closest_landing_pad(
+        self, reference_point: location.Location, landing_pad_locations: "list[location.Location]"
+    ) -> location.Location:
         """
         Find the landing pad closest to the reference point (waypoint).
         Uses squared distance to avoid expensive square root calculations.
@@ -173,7 +178,7 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
             return None
 
         closest_pad = None
-        min_distance_squared = float('inf')  # Initialize with infinity
+        min_distance_squared = float("inf")  # Initialize with infinity
 
         for landing_pad in landing_pad_locations:
             # Use squared distance to avoid square root calculation
@@ -228,5 +233,7 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
         """
         Check if position is within flight boundary.
         """
-        return (self.boundary_min <= pos.location_x <= self.boundary_max and
-                self.boundary_min <= pos.location_y <= self.boundary_max)
+        return (
+            self.boundary_min <= pos.location_x <= self.boundary_max
+            and self.boundary_min <= pos.location_y <= self.boundary_max
+        )

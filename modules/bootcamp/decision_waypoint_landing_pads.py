@@ -132,7 +132,7 @@ class DecisionWaypointLandingPads(base_decision.BaseDecision):
                 if relative_movement is not None:
                     command = commands.Command.create_set_relative_destination_command(
                         relative_x=relative_movement.location_x,
-                        relative_y=relative_movement.location_y
+                        relative_y=relative_movement.location_y,
                     )
                 else:
                     # If we can't move, try to land
@@ -153,6 +153,7 @@ class DecisionWaypointLandingPads(base_decision.BaseDecision):
         return command
 
         # Helper methods below
+
     def _calculate_distance(self, pos1: location.Location, pos2: location.Location) -> float:
         # Calculate distance between two locations.
 
@@ -160,21 +161,25 @@ class DecisionWaypointLandingPads(base_decision.BaseDecision):
         dy = pos2.location_y - pos1.location_y
         return (dx * dx + dy * dy) ** 0.5
 
-    def _calculate_distance_squared(self, pos1: location.Location, pos2: location.Location) -> float:
+    def _calculate_distance_squared(
+        self, pos1: location.Location, pos2: location.Location
+    ) -> float:
         # Calculate squared distance
 
         dx = pos2.location_x - pos1.location_x
         dy = pos2.location_y - pos1.location_y
         return dx * dx + dy * dy
 
-    def _find_closest_landing_pad(self, landing_pad_locations: "list[location.Location]") -> location.Location:
+    def _find_closest_landing_pad(
+        self, landing_pad_locations: "list[location.Location]"
+    ) -> location.Location:
         # Find the landing pad closest to waypoint
 
         if not landing_pad_locations:
             return None
 
         closest_pad = None
-        min_distance_squared = float('inf')  # Initialize with very large number
+        min_distance_squared = float("inf")  # Initialize with very large number
 
         for landing_pad in landing_pad_locations:
             # Use squared distance to avoid square root calculation (bonus)
@@ -186,7 +191,9 @@ class DecisionWaypointLandingPads(base_decision.BaseDecision):
 
         return closest_pad
 
-    def _calculate_relative_movement(self, current_pos: location.Location, target: location.Location) -> location.Location:
+    def _calculate_relative_movement(
+        self, current_pos: location.Location, target: location.Location
+    ) -> location.Location:
 
         # Calculate relative movement towards target, ensuring it stays within boundary.
 
