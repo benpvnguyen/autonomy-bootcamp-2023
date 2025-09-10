@@ -71,9 +71,9 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
         # Only make decisions when drone is halted
         if current_status == drone_status.DroneStatus.HALTED:
             # Calculate distance to waypoint
-            distance = self._calculate_distance_squared(current_position, self.waypoint)
+            distance_squared = self._calculate_distance_squared(current_position, self.waypoint)
 
-            if distance <= self.acceptance_radius:
+            if distance_squared <= self.acceptance_radius * self.acceptance_radius:
                 # Close enough - land the drone
                 command = commands.Command.create_land_command()
             else:
